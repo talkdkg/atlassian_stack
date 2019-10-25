@@ -18,7 +18,7 @@ CREATE APP LINKS:
 			#start container
 			#mount certificate to container on run
 			docker container stop jira && docker container remove jira
-			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=${MEMORY} -e JVM_MAXIMUM_MEMORY=4092m  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/jira -e -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
+			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=4092m -e JVM_MAXIMUM_MEMORY=4092m  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/jira -e -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
 			#verify it is there, better use names for containers
 			docker exec -it jira ls /store
 			#or to automate use
@@ -38,7 +38,7 @@ CREATE APP LINKS:
             #start container
             #mount certificate to container on run
             docker container stop jira && docker container remove jira
-			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/confluence  -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
+			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/confluence  -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
 			(...)
 			 docker exec -it confluence /opt/java/openjdk/jre/bin/keytool -import -alias proxy_cert -file /store/ca.crt -keystore /opt/java/openjdk/jre/lib/security/cacerts -noprompt
 			 docker container stop confluence

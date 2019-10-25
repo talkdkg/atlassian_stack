@@ -4,15 +4,15 @@ PRE-REQUISITES:
 
 PARAMS:
 
-    JIRA VM with ${JIRA_IP}
-    CONFLUENCE,PG_ADMIN,POSTGRES VM with ${CONFLUENCE_IP}
-    CROWD+HTTP VM with ${PROXY_IP} and accessible via ${PROXY_URL}
+    JIRA VM with 172.17.8.182 - 172.17.8.182
+    CONFLUENCE,PG_ADMIN,POSTGRES VM with 172.17.8.181 - 172.17.8.181
+    CROWD+HTTP VM with 172.17.8.187 and accessible via ${PROXY_URL} - 172.17.8.187
 
-    ADMIN_USER: ${ADMIN_USER}
-    ADMIN_PASS: ${ADMIN_PASS}
-    MEMORY: ${MEMORY}
-    PROJECT NAME: ${PROJECT_NAME}
-    DIRECTORY CROWD: ${DIRECTORY}
+    ADMIN_USER: conjir
+    ADMIN_PASS: Camel0
+    MEMORY: 4092m
+    PROJECT NAME: pepco
+    DIRECTORY CROWD: PEPDIR
 
 USE
 
@@ -21,16 +21,16 @@ On hosts download already personalized instructions from your branch
 
     git clone https://github.com/gabrielstar/atlassian_stack.git
     git fetch
-    git checkout -b ${PROJECT_NAME} origin/${PROJECT_NAME}
+    git checkout -b pepco origin/pepco
     git pull
 
 
 BASIC SET-UP
 
-1. Set up PG_ADMIN ${CONFLUENCE_IP}:9999 and POSTGRES-9.6 under ${CONFLUENCE_IP}:64320
-2. Set up Confluence stand-alone under http://${CONFLUENCE_IP}:8090/confluence
-3  Set up JIRA stand-alone under http://${JIRA_IP}:8080/jira
-4. Set up Crowd stand-alone under http://${PROXY_IP}:8095/crowd
+1. Set up PG_ADMIN 172.17.8.181:9999 and POSTGRES-9.6 under 172.17.8.181:64320
+2. Set up Confluence stand-alone under http://172.17.8.181:8090/confluence
+3  Set up JIRA stand-alone under http://172.17.8.182:8080/jira
+4. Set up Crowd stand-alone under http://172.17.8.187:8095/crowd
 5. Set up Apache with HTTP under http://${PROXY_URL} and Configure services under http://${PROXY_URL}/confluence, http://${PROXY_URL}/jira
 
 ADDITIONAL

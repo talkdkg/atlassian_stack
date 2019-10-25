@@ -1,4 +1,4 @@
-http://${CONFLUENCE_IP}:8090/confluence
+http://172.17.8.181:8090/confluence
 http://${PROXY_URL}/confluence
 https://${PROXY_URL}/confluence
 
@@ -8,12 +8,12 @@ docker volume create --name confluenceVolume && docker volume create --name stor
 
 #run container with context path
 
-docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
+docker run -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
 ip addr show
 
-#In Confluence set BaseURl to actual IP: e.g. http://${CONFLUENCE_IP}:8090/confluence, ip addr show
+#In Confluence set BaseURl to actual IP: e.g. http://172.17.8.181:8090/confluence, ip addr show
 
 #TEST
 
 docker exec -it confluence cat /opt/atlassian/confluence/conf/server.xml
-Create sample space via http://${CONFLUENCE_IP}:8090/confluence
+Create sample space via http://172.17.8.181:8090/confluence

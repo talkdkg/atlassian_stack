@@ -43,14 +43,14 @@ Create SSL Config:
                  Require all granted
         </Proxy>
 
-        ProxyPass /confluence http://${CONFLUENCE_IP}:8090/confluence
-        ProxyPassReverse /confluence http://${CONFLUENCE_IP}:8090/confluence
+        ProxyPass /confluence http://172.17.8.181:8090/confluence
+        ProxyPassReverse /confluence http://172.17.8.181:8090/confluence
 
-        ProxyPass /jira http://${JIRA_IP}:8080/jira
-        ProxyPassReverse /jira http://${JIRA_IP}:8080/jira
+        ProxyPass /jira http://172.17.8.182:8080/jira
+        ProxyPassReverse /jira http://172.17.8.182:8080/jira
 
-        ProxyPass /crowd http://${PROXY_IP}:8095/crowd
-        ProxyPassReverse /crowd http://${PROXY_IP}:8095/crowd
+        ProxyPass /crowd http://172.17.8.187:8095/crowd
+        ProxyPassReverse /crowd http://172.17.8.187:8095/crowd
 	</VirtualHost>
 
 	systemctl restart httpd
@@ -84,12 +84,12 @@ Create SSL Config:
 	JIRA
 
 		docker container stop jira && docker container rm jira
-            docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira6" -d -p 8080:8080 atlassian/jira-software
+            docker run -e JVM_MAXIMUM_MEMORY=4092m -e  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira6" -d -p 8080:8080 atlassian/jira-software
 		Log in to JIRA: set BaseURl to DNS: e.g. System->  https://${PROXY_URL}/jira
 
 	CONFLUENCE
 		docker container stop confluence && docker container rm confluence
-		docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence8" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
+		docker run -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence8" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
 		set BaseURl to DNS: e.g. https://${PROXY_URL}/confluence
 
 	Tests in Crowd:
