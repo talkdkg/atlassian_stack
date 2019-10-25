@@ -1,31 +1,44 @@
-0. Check that tools exist or install:
+PRE-REQUISITES:
 
-docker -v -> Docker version 1.13.1
-docker-compose -v ->docker-compose version 1.24.1
-git --version -> git version 1.8.3.1
-free -m -> at least 8G
-df -h
-wget
+    yum install docker docker-compose git wget
 
-We assume to have 3 VMs 4c8g.
+PARAMS:
 
-0. On All perform:
+    JIRA VM with ${JIRA_IP}
+    CONFLUENCE,PG_ADMIN,POSTGRES VM with ${CONFLUENCE_IP}
+    CROWD+HTTP VM with ${PROXY_IP} and accessible via ${PROXY_URL}
 
-git clone VMS https://github.com/gabrielstar/atlassian_stack.git
-git checkout -develop origin/develop
+    ADMIN_USER: ${ADMIN_USER}
+    ADMIN_PASS: ${ADMIN_PASS}
+    MEMORY: ${MEMORY}
+    PROJECT NAME: ${PROJECT_NAME}
+    DIRECTORY CROWD: ${DIRECTORY}
 
-BASIC
+USE
 
-1. On VM1 Execute steps 1 - set up pgadmin and postgres9.6
-2. On VM1 Execute steps 2 - set up Confluence stand-alone
-3  On VM2 execute steps 3 - set up JIRA stand-alone
-4. On VM3 Execute steps 4 - set up Crowd stand-alone
-5. On VM4 Execute steps 5 - set up Apache with HTTP, Update Services Configurations
+Before install activities create a new branch and replace PARAMS above with real values.
+On hosts download already personalized instructions from your branch
+
+    git clone https://github.com/gabrielstar/atlassian_stack.git
+    git fetch
+    git checkout -b ${PROJECT_NAME} origin/${PROJECT_NAME}
+    git pull
+
+
+BASIC SET-UP
+
+1. Set up PG_ADMIN ${CONFLUENCE_IP}:9999 and POSTGRES-9.6 under ${CONFLUENCE_IP}:64320
+2. Set up Confluence stand-alone under http://${CONFLUENCE_IP}:8090/confluence
+3  Set up JIRA stand-alone under http://${JIRA_IP}:8080/jira
+4. Set up Crowd stand-alone under http://${PROXY_IP}:8095/crowd
+5. Set up Apache with HTTP under http://${PROXY_URL} and Configure services under http://${PROXY_URL}/confluence, http://${PROXY_URL}/jira
 
 ADDITIONAL
 
-6. On VM4 Execute steps 6 - Conigure SSL on Apache
-7. On VM1 Execute steps 7 - set up Confluence with reverse proxy and self-signed certificate
-8. On VM2 Execute steps 8 - set up JIRA with reverse proxy and self-signed certificate
+6. Confgure SSL on Apache under https://${PROXY_URL}
+     Set up Confluence with reverse proxy and self-signed certificate under https://${PROXY_URL}/confluence
+     Set up JIRA with reverse proxy and self-signed certificate under https://${PROXY_URL}/jira
+7. Set up application links using SSL
+
 
 

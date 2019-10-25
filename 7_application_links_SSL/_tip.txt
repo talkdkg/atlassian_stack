@@ -1,7 +1,7 @@
 CREATE APP LINKS:
 
-	Confluence - as admin -> Application Links add JIRA: https://apache/jira
-	JIRA - Applications - Application Links add Confluence: https://apache/confluence
+	Confluence - as admin -> Application Links add JIRA: https://${PROXY_URL}/jira
+	JIRA - Applications - Application Links add Confluence: https://${PROXY_URL}/confluence
 
 	This will fail be default because certificate is self-signed, therefore we need to import it to local trust store :) FROM
 	if the certificate is self-signed, you can import the certificate into the Java trust store, for the JVM that the local application is using. See Check the SSL certificate location below.
@@ -10,7 +10,7 @@ CREATE APP LINKS:
 	This will fail because we use self.signed certificate
 	Proper way to handle that is to mount certificate to container so it is available and improt it into main JAVA store.
 
-		JIRA
+		JIRA VM
             vi ca-crt ...
 			docker volume inspect store
 			#copy cert to docker mount
@@ -18,7 +18,7 @@ CREATE APP LINKS:
 			#start container
 			#mount certificate to container on run
 			docker container stop jira && docker container remove jira
-			docker run -v store:/store -e -e JVM_MAXIMUM_MEMORY=4092m  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=apache -e ATL_TOMCAT_CONTEXTPATH=/jira -e -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
+			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=${MEMORY} -e JVM_MAXIMUM_MEMORY=4092m  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/jira -e -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
 			#verify it is there, better use names for containers
 			docker exec -it jira ls /store
 			#or to automate use
@@ -29,7 +29,7 @@ CREATE APP LINKS:
 			docker container start jira
 
 
-		CONFLUENCE:
+		CONFLUENCE VM:
 
 			vi ca-crt ...
             docker volume inspect store
@@ -38,17 +38,17 @@ CREATE APP LINKS:
             #start container
             #mount certificate to container on run
             docker container stop jira && docker container remove jira
-			docker run -v store:/store -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=apache -e ATL_TOMCAT_CONTEXTPATH=/confluence  -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
+			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${PROXY_URL} -e ATL_TOMCAT_CONTEXTPATH=/confluence  -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
 			(...)
 			 docker exec -it confluence /opt/java/openjdk/jre/bin/keytool -import -alias proxy_cert -file /store/ca.crt -keystore /opt/java/openjdk/jre/lib/security/cacerts -noprompt
 			 docker container stop confluence
 			 docker container start confluence
 
-			To be able to link Confluence Pages to JIRA tickets https://confluence.atlassian.com/doc/enabling-the-remote-api-150460.html
+			IMPORTANT_ To be able to link Confluence Pages to JIRA tickets https://confluence.atlassian.com/doc/enabling-the-remote-api-150460.html
 
 
-            Confluence - as admin -> Application Links add JIRA: https://apache/jira
-            JIRA - Applications - Application Links add Confluence: https://apache/confluenc
+            Confluence - as admin -> Application Links add JIRA: https://${PROXY_URL}/jira
+            JIRA - Applications - Application Links add Confluence: https://${PROXY_URL}/confluence
             Check links are bi-directional
 
 			Test: link in jira ticket Confluence Page
