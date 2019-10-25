@@ -1,0 +1,8 @@
+docker-compose up -d
+docker-compose logs
+
+Open pg_admin: http://10.44.85.26:9999/browser/ & user pgadmin
+Create new connection: postgres: changeit
+In postgres:
+	1) create new user: Login/Group Roles -> Name:pepco, password: pepco, privileges: Can login? true, Save
+	2) create db: Create-> Database -> jira/confluence/crowd, owner pepco, collation utf-8
