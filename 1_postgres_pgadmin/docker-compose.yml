@@ -1,0 +1,27 @@
+version: "3.5"
+services:
+  pgadmin4:
+  image: "dpage/pgadmin4"
+  container_name: "pgadmin4"
+  environment:
+    PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+    PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+  ports:
+  - "9999:80"
+  volumes:
+  - pgadminVolume:/var/lib/pgadmin
+  restart: unless-stopped
+
+    db:
+  image: "postgres:9.6"
+  container_name: "postgres9.6"
+  environment:
+    POSTGRES_USER: ${POSTGRES_USER:-postgres}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+  ports:
+  - "64320:5432"
+  volumes:
+  - postgresVolume9.6:/var/lib/postgresql/data
+volumes:
+  postgresVolume9.6:
+  pgadminVolume:

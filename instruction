@@ -1,0 +1,10 @@
+0. Check that tools exist or install:
+
+docker -v -> Docker version 1.13.1
+docker-compose -v ->docker-compose version 1.24.1
+git --version -> git version 1.8.3.1
+
+0.
+1. On VM1 Execute steps 1
+2. On VM2 Execute steps 2
+3. On VM3 Execute steps 3
