@@ -1,0 +1,102 @@
+Create SSL Config:
+
+	GET CERTIFICATES
+
+	Implementing certificate for apache on Apache: https://wiki.centos.org/HowTos/Https
+
+	yum install mod_ssl openssl
+	openssl genrsa -out ca.key 2048
+	openssl req -new -key ca.key -out ca.csr
+	openssl x509 -req -days 365 -in ca.csr -signkey ca.key -out ca.crt
+	cp ca.crt /etc/pki/tls/certs
+	cp ca.key /etc/pki/tls/private/ca.key
+	cp ca.csr /etc/pki/tls/private/ca.csr
+
+	EDIT SSL CONF FOR APACHE:
+
+	vi +/SSLCertificateFile /etc/httpd/conf.d/ssl.conf
+	SSLCertificateFile /etc/pki/tls/certs/ca.crt
+	SSLCertificateKeyFile /etc/pki/tls/private/ca.key
+
+	systemctl restart httpd
+
+	CREATE VIRTUAL HOST CONFIG FOR APACHE:
+
+	 cp /etc/httpd/conf.d/atlassian-vhost.conf /etc/httpd/conf.d/atlassian-vhost-ssl.conf
+     vi /etc/httpd/conf.d/atlassian-vhost-ssl.conf
+
+	Ensure we redirect main URL
+
+	<VirtualHost *:443>
+        SSLEngine on
+        SSLCertificateFile /etc/pki/tls/certs/ca.crt
+        SSLCertificateKeyFile /etc/pki/tls/private/ca.key
+
+        ServerName apache
+
+        Redirect "/" "/jira"
+
+        ProxyRequests Off
+        ProxyVia Off
+
+        <Proxy *>
+                 Require all granted
+        </Proxy>
+
+        ProxyPass /confluence http://CONFLUENCE_IP:8090/confluence
+        ProxyPassReverse /confluence http://CONFLUENCE_IP:8090/confluence
+
+        ProxyPass /jira http://JIRA_IP:8080/jira
+        ProxyPassReverse /jira http://JIRA_IP:8080/jira
+
+        ProxyPass /crowd http://CROWD_IP:8095/crowd
+        ProxyPassReverse /crowd http://CROWD_IP:8095/crowd
+	</VirtualHost>
+
+	systemctl restart httpd
+
+	Test - should all open main page with https:
+
+	 Go to: https://apache/jira
+	 Go to: https://apache/confluence
+	 Go to: https://apache/crowd
+
+
+
+    CONFIGURE SERVICES TO TALK BACK TO APACHE ON 443 and also ADJUSTING THEIR BASE URLS
+
+
+	CROWD:
+
+	vi /opt/crowd/atlassian-crowd-3.7.0/apache-tomcat/conf/server.xml
+
+	Change:  <Connector port="8009" enableLookups="false" redirectPort="8443" protocol="AJP/1.3" /> to
+			 <Connector scheme="https" proxyName="apache" port="8009" enableLookups="false" redirectPort="8443" protocol="AJP/1.3" />
+
+
+	/opt/crowd/atlassian-crowd-3.7.0/stop_crowd.sh
+	/opt/crowd/atlassian-crowd-3.7.0/start_crowd.sh
+
+	Test: log in to crowd: pepco:pecpos
+
+	Update BaseURL to: https://apache/crowd
+
+	JIRA
+
+		docker container stop jira && docker container rm jira
+		docker run -e JVM_MAXIMUM_MEMORY=4092m -e  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=apache -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira6" -d -p 8080:8080 atlassian/jira-software
+		Log in to JIRA: set BaseURl to DNS: e.g. System->  https://apache/jira
+
+	CONFLUENCE
+		docker container stop confluence && docker container rm confluence
+		docker run -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=apache -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence8" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
+		set BaseURl to DNS: e.g. https://apache/confluence
+
+	Tests in Crowd:
+
+	1) Add user
+
+		Add user->foo_foo, directory Pepco Capgemini POC, wait 60s to sync
+		Assert User Applications should be: jira and confluence
+		Login to JIRA
+		Login to Confluence.

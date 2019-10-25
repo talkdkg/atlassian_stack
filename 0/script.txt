@@ -481,7 +481,7 @@ CREATE APP LINKS:
 			docker volume inspect stores
 			docker run -v store:/store -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=de-muc-zensus-docker-08 -e ATL_TOMCAT_CONTEXTPATH=/confluence -e JVM_MAXIMUM_MEMORY=2048m -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence8" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
 			(...)
-			 docker exec -it confluene8 /opt/java/openjdk/jre/bin/keytool -import -alias proxy_cert -file /store/ca.crt -keystore /opt/java/openjdk/jre/lib/security/cacerts -noprompt
+			 docker exec -it confluence /opt/java/openjdk/jre/bin/keytool -import -alias proxy_cert -file /store/ca.crt -keystore /opt/java/openjdk/jre/lib/security/cacerts -noprompt
 			 docker container stop confluence8 
 			 docker container start confluence8
 		

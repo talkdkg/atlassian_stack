@@ -7,9 +7,12 @@ free -m -> at least 8G
 df -h
 wget
 
-We assume to have 3 VMs.
+We assume to have 3 VMs 4c8g.
 
-0. On All git clone VMS https://github.com/gabrielstar/atlassian_stack.git
+0. On All perform:
+
+git clone VMS https://github.com/gabrielstar/atlassian_stack.git
+git checkout -b your_app origin/your_app
 
 BASIC
 
