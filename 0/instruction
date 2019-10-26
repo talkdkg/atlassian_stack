@@ -6,7 +6,7 @@ PARAMS:
 
     JIRA VM with 172.17.8.182 - 172.17.8.182
     CONFLUENCE,PG_ADMIN,POSTGRES VM with 172.17.8.181 - 172.17.8.181
-    CROWD+HTTP VM with 172.17.8.187 and accessible via ${PROXY_URL} - 172.17.8.187
+    CROWD+HTTP VM with 172.17.8.187 and accessible via centos-linux-t - 172.17.8.187
 
     ADMIN_USER: conjir
     ADMIN_PASS: Camel0
@@ -31,13 +31,13 @@ BASIC SET-UP
 2. Set up Confluence stand-alone under http://172.17.8.181:8090/confluence
 3  Set up JIRA stand-alone under http://172.17.8.182:8080/jira
 4. Set up Crowd stand-alone under http://172.17.8.187:8095/crowd
-5. Set up Apache with HTTP under http://${PROXY_URL} and Configure services under http://${PROXY_URL}/confluence, http://${PROXY_URL}/jira
+5. Set up Apache with HTTP under http://centos-linux-t and Configure services under http://centos-linux-t/confluence, http://centos-linux-t/jira
 
 ADDITIONAL
 
-6. Confgure SSL on Apache under https://${PROXY_URL}
-     Set up Confluence with reverse proxy and self-signed certificate under https://${PROXY_URL}/confluence
-     Set up JIRA with reverse proxy and self-signed certificate under https://${PROXY_URL}/jira
+6. Confgure SSL on Apache under https://centos-linux-t
+     Set up Confluence with reverse proxy and self-signed certificate under https://centos-linux-t/confluence
+     Set up JIRA with reverse proxy and self-signed certificate under https://centos-linux-t/jira
 7. Set up application links using SSL
 
 

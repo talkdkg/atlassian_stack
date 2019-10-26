@@ -1,6 +1,6 @@
 http://172.17.8.187:8095/crowd
-http://${PROXY_URL}/crowd
-https://${PROXY_URL}/crowd
+http://centos-linux-t/crowd
+https://centos-linux-t/crowd
 
 as root:
 

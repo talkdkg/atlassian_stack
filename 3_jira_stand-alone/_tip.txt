@@ -1,6 +1,6 @@
 http://172.17.8.182:8080/jira
-http://${PROXY_URL}/jira
-https://${PROXY_URL}/jira
+http://centos-linux-t/jira
+https://centos-linux-t/jira
 
 #create volumes for certificater and for ease of use
 docker volume create --name jiraVolume && docker volume create --name store && docker volume create --name jiraConfigVolume

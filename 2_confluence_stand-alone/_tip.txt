@@ -1,6 +1,6 @@
 http://172.17.8.181:8090/confluence
-http://${PROXY_URL}/confluence
-https://${PROXY_URL}/confluence
+http://centos-linux-t/confluence
+https://centos-linux-t/confluence
 
 #create volumes for certificates and for ease of use
 
