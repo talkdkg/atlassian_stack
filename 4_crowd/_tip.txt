@@ -2,16 +2,22 @@ http://172.17.8.187:8095/crowd
 http://centos-linux-t/crowd
 https://centos-linux-t/crowd
 
+#for demo sake:
+
+systemctl disable firewalld
+systemctl stop firewalld
+
 as root:
 
 #DOWNLOAD ADOPT OPEN JDK (Atlassian is using the same):
-
+    yum install unzip
     wget https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_linux_hotspot_8u222b10.tar.gz
     mkdir -p /opt/openJDK8
     mkdir -p /opt/crowd
     cp OpenJDK8U-jdk_x64_linux_hotspot_8u222b10.tar.gz /opt/openJDK8/
     cd /opt/openJDK8/
     tar -xzvf OpenJDK8U-jdk_x64_linux_hotspot_8u222b10.tar.gz
+    adduser techuser
     chown -R techuser:techuser /opt/*
 
 #set JAVA for all users
@@ -19,6 +25,7 @@ as root:
     vi /etc/profile
     export JAVA_HOME=/opt/openJDK8/jdk8u222-b10/
     export PATH=$JAVA_HOME/bin:$PATH
+    source /etc/profile
 
 #restart shell and check JAVA is available to all
 
@@ -56,8 +63,9 @@ Download crowd
 
 
  #connect to postgres - https://confluence.atlassian.com/crowd/postgresql-4030906.html, https://chartio.com/help/data-sources/creating-a-user-with-pgadmin/
+ start crowd - by default in background:
 
- 	 use db: crowd, ...
+ 	 use db: crowd, conjir, Camel0
 
  	[ atlassian-crowd-3.7.0]$ ./start_crowd.sh
  	To run Crowd in the foreground, start the server with ./start_crowd.sh -fg
@@ -72,7 +80,15 @@ Download crowd
  	WIZARD START
  	open http://172.17.8.187:8095/crowd
 
-	In crowd - Enter License:
+	In crowd - Enter License:server id BCX0-33NK-8E28-F00R
+
+	AAABPg0ODAoPeNqNkT9PwzAQxXd/CkssMDiy04LSSpaAJEgVSYqaghhYXHMtFokT2U5L++lJmlT8E
+    QPDLffufveefZZWGs+lw36AGZ0yNr2kOIyW2KdsgiKw0qjaqUrz0FS7V3yeg9mCuXiZ4ngrikZ0G
+    pKd5gnp1Ba4Mw2g0MBRioQD3rEIo8SfoLDSrp3LRAl8I1ZGQeFZJ4w8wM6+q2sp6g2USitPVuXAz
+    VvdgeFrUVgYeomSoC0s9zUcWeE8TeNFOLtJTifiVKjiHze+YvTOi578BMZ2PR+1HO1ACy0h/qiV2
+    X/LxIgfoLnZCK1szwhPcJzX3sGrvAr1TzaL+G34TMlolN2TIPYDckfpAuVxxtsiCRuPr3zG6BAwa
+    8oVmPn60bZGOGFoSNxikln0c2OQ/nb30Bj5Jiz8/olPAJ6nUDAtAhUAhvmpDGdMRGkUd5TbyD5+F
+    xJ2yYwCFGx0uarIgEW8+SYpy6g1+VDJR2yKX02fr
 
 
 	New Installation

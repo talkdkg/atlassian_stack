@@ -1,8 +1,8 @@
 firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do nto lower the guard in production though:
 
-systemctl firewalld disable
-systemctl firewalld stop
-iptables -L
+systemctl disable firewalld
+systemctl stop firewalld
+iptables -LL
 
 
 docker-compose up -d
@@ -18,11 +18,11 @@ After install check exposed ports are responding:
     telnet localhost 9999
 
 
-Open pg_admin: http://172.17.8.182:9999/browser/ & user pgadmin:a
-Create new connection: postgres: changeit
+Open pg_admin: http://172.17.8.182:9999/browser/ & user pgadmin4@pgadmin.org:Camel0
+Create new connection: postgres: Camel0
 
 postgres: 172.17.8.182:64320
 
 In postgres:
 	1) create new user: Login/Group Roles -> Name:conjir, password: Camel0, privileges: Can login? true, Save
-	2) create db: Create-> Database -> jira/confluence/crowd, owner conjir, collation utf-8
+	2) create db: Create-> Database -> jira/confluence/crowd, owner conjir, collation utf-8, use template0
