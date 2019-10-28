@@ -1,9 +1,24 @@
+firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do nto lower the guard in production though:
+
+systemctl firewalld disable
+systemctl firewalld stop
+iptables -L
+
+
 docker-compose up -d
 docker-compose logs
 
 If you get yaml syntax errors use https://jsonformatter.org/yaml-formatter to format.
 
-Open pg_admin: http://172.17.8.182:9999/browser/ & user pgadmin
+
+After install check exposed ports are responding:
+
+    yum install telnet
+    telnet localhost 64320
+    telnet localhost 9999
+
+
+Open pg_admin: http://172.17.8.182:9999/browser/ & user pgadmin:a
 Create new connection: postgres: changeit
 
 postgres: 172.17.8.182:64320
