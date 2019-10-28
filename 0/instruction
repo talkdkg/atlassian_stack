@@ -1,8 +1,9 @@
 PRE-REQUISITES:
 
-    yum install docker docker-compose git wget
+    install docker:
+        https://docs.docker.com/install/linux/docker-ce/centos/
     for compose on CentOS 7:
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compos
+        sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
 
 PARAMS:
@@ -22,10 +23,7 @@ USE
 Before install activities create a new branch and replace PARAMS above with real values.
 On hosts download already personalized instructions from your branch
 
-    git clone https://github.com/gabrielstar/atlassian_stack.git
-    git fetch
-    git checkout -b pepco origin/pepco
-    git pull
+    yum install git && git clone https://github.com/gabrielstar/atlassian_stack.git && cd atlassian_stack &&  git fetch &&   git checkout -b pepco origin/pepco && git pull
 
 
 BASIC SET-UP
