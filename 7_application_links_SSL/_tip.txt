@@ -54,3 +54,4 @@ CREATE APP LINKS:
 			Test: link in jira ticket Confluence Page
 			Test: search for a ticket
 			Create new ticket from Confluence:
+			Create user/group in Crowd and check for propagation

@@ -1,10 +1,10 @@
 docker-compose up -d
 docker-compose logs
 
-Open pg_admin: http://172.17.8.181:9999/browser/ & user pgadmin
+Open pg_admin: http://172.17.8.182:9999/browser/ & user pgadmin
 Create new connection: postgres: changeit
 
-postgres: 172.17.8.181:64320
+postgres: 172.17.8.182:64320
 
 In postgres:
 	1) create new user: Login/Group Roles -> Name:conjir, password: Camel0, privileges: Can login? true, Save

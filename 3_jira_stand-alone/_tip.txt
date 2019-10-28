@@ -1,4 +1,4 @@
-http://172.17.8.182:8080/jira
+http://172.17.8.181:8080/jira
 http://centos-linux-t/jira
 https://centos-linux-t/jira
 
@@ -10,7 +10,7 @@ docker volume create --name jiraVolume && docker volume create --name store && d
 docker run -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
 ip addr show
 
-#In Jira set BaseURl to actual IP: e.g. http://172.17.8.182:8080/jira, ip addr show
+#In Jira set BaseURl to actual IP: e.g. http://172.17.8.181:8080/jira, ip addr show
 
 #TEST
 1) check server.xml tomcat config has contectpath
