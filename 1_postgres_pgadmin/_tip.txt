@@ -1,6 +1,8 @@
 docker-compose up -d
 docker-compose logs
 
+If you get yaml syntax errors use https://jsonformatter.org/yaml-formatter to format.
+
 Open pg_admin: http://172.17.8.182:9999/browser/ & user pgadmin
 Create new connection: postgres: changeit
 
