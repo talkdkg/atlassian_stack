@@ -1,27 +1,39 @@
-firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do nto lower the guard in production though:
+URLS:
+    http://172.17.8.182:9999/browser/ - pg_admin
+    172.17.8.182:64320 - postgres
 
-systemctl disable firewalld
-systemctl stop firewalld
-iptables -LL
+NOTE:
+
+    firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do not lower the guard in production though:
+
+        systemctl disable firewalld
+        systemctl stop firewalld
+        iptables -L
+        sudo systemctl restart docker
+
+INSTALL POSTGRES and PG_ADMIN from docker-compose.yml
+
+        docker-compose up -d
+        docker-compose logs
+
+        If you get yaml syntax errors use https://jsonformatter.org/yaml-formatter to format.
+
+TEST:
+
+        After install check exposed ports are responding, on the same host:
+
+            yum install telnet
+            telnet localhost 64320
+            telnet localhost 9999
 
 
-docker-compose up -d
-docker-compose logs
-
-If you get yaml syntax errors use https://jsonformatter.org/yaml-formatter to format.
-
-
-After install check exposed ports are responding:
-
-    yum install telnet
-    telnet localhost 64320
-    telnet localhost 9999
+        Open pg_admin: http://172.17.8.182:9999/browser/ & user pgadmin4@pgadmin.org:Camel0
+        Create new connection:
+            postgres: Camel0
 
 
-Open pg_admin: http://172.17.8.182:9999/browser/ & user pgadmin4@pgadmin.org:Camel0
-Create new connection: postgres: Camel0
 
-postgres: 172.17.8.182:64320
+CREATE DBs for JIRA, CONFLUENCE and CROWD
 
 In postgres:
 	1) create new user: Login/Group Roles -> Name:conjir, password: Camel0, privileges: Can login? true, Save

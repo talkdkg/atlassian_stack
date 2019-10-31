@@ -2,15 +2,11 @@
 
 	verify JVM_MAXIMUM_MEMORY is ok, put it large enough
 
-2) XRAY
-
-	in JIRA install plugin, verify creation of JIRA project for XRAY
-
-3) STARTUP/STOP
+2) STARTUP/STOP
 
 	Use:
 
 	docker container stop jira
 	docker container start jira
 
-	If you recreate containers you need to re-import certificates so do not.
+	Remembrr: If you recreate containers you need to re-import certificates!.

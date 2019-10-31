@@ -1,35 +1,43 @@
-http://172.17.8.182:8090/confluence
-http://centos-linux-t/confluence
-https://centos-linux-t/confluence
+URLs:
 
-firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do nto lower the guard in production though:
+    http://172.17.8.182:8090/confluence
+    http://centos-linux-t/confluence
+    https://centos-linux-t/confluence
 
-systemctl disable firewalld
-systemctl stop firewalld
-iptables -LL
+NOTE:
+    firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do nto lower the guard in production though:
 
-#create volumes for certificates and for ease of use
+        systemctl disable firewalld
+        systemctl stop firewalld
+        iptables -L
+        sudo systemctl restart docker
 
-docker volume create --name confluenceVolume && docker volume create --name store && docker volume create --name confluenceConfigVolume
+CREATE DOCKER VOLUMES:
 
-#run container with context path
+    docker volume create --name confluenceVolume && docker volume create --name store && docker volume create --name confluenceConfigVolume
 
-docker run -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
-ip addr show
+RUN CONTAINER WITH PARAMETERS: https://hub.docker.com/r/atlassian/confluence-server/
 
-#In Confluence set BaseURl to actual IP: e.g. http://172.17.8.182:8090/confluence, ip addr show
+    docker run -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
 
-License: server ID: BCGF-KABY-C4VE-RXUI
+SET BASE URL
 
-AAABQg0ODAoPeNqNkV9LwzAUxd/zKQK+6ENKW/bPQcAtrVJsV1m3oeBLFu5msE1Lkk7dpzdbHU7xw
-YdAyD3nnt+9uchqhXNhcTjC/nDsh+Owj1m0wKEfXKMIjNCysbJWlNVqU7agBODLAvQO9NXzGMc7X
-rb8IEBMw/EScQv0YCeBT8IRckbLhZ3xCuiWr7WE0jOWa7GHN/MqbwRvtlBJJT1RV0i4GM/J5Q6o1
-S10D4XTW9B0w0sDp45xxmX5j5bfjGcdUylAGVh8NHAkY3mWxXOWTFJUdqUVaHPwhMjlKAuKu9nj9
-0bqj7MRAxIOUa63XEnTZbBTOC4ab+/VXo26fSURnbK7W3I/mT4R1lvFZP64TFARz6g7JA16vYHfH
-w3QF5vTp0n0s3Rkn7XVGnS+WRqHSElwMvwN99Bq8cIN/P6XTw/MqDkwLAIUL2QsrAUqdfRiglu9U
-Xf3TSgwOekCFHvxzPgt17tGegIHCby+Xl9uFnmZX02g0
+    In Confluence APP: set BaseURl to actual IP: e.g. http://172.17.8.182:8090/confluence
+    Confirm ip
+        ip addr show
+
+GET LICENSE for server ID: BCGF-KABY-C4VE-RXUI
+
+    AAABQg0ODAoPeNqNkV9LwzAUxd/zKQK+6ENKW/bPQcAtrVJsV1m3oeBLFu5msE1Lkk7dpzdbHU7xw
+    YdAyD3nnt+9uchqhXNhcTjC/nDsh+Owj1m0wKEfXKMIjNCysbJWlNVqU7agBODLAvQO9NXzGMc7X
+    rb8IEBMw/EScQv0YCeBT8IRckbLhZ3xCuiWr7WE0jOWa7GHN/MqbwRvtlBJJT1RV0i4GM/J5Q6o1
+    S10D4XTW9B0w0sDp45xxmX5j5bfjGcdUylAGVh8NHAkY3mWxXOWTFJUdqUVaHPwhMjlKAuKu9nj9
+    0bqj7MRAxIOUa63XEnTZbBTOC4ab+/VXo26fSURnbK7W3I/mT4R1lvFZP64TFARz6g7JA16vYHfH
+    w3QF5vTp0n0s3Rkn7XVGnS+WRqHSElwMvwN99Bq8cIN/P6XTw/MqDkwLAIUL2QsrAUqdfRiglu9U
+    Xf3TSgwOekCFHvxzPgt17tGegIHCby+Xl9uFnmZX02g0
 
 #TEST
 
-docker exec -it confluence cat /opt/atlassian/confluence/conf/server.xml
-Create sample space via http://172.17.8.182:8090/confluence
+    Display Tomacat Config file
+        docker exec -it confluence cat /opt/atlassian/confluence/conf/server.xml
+    Create sample space via http://172.17.8.182:8090/confluence

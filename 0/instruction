@@ -5,6 +5,19 @@ PRE-REQUISITES:
     for compose on CentOS 7:
         sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
+    If you install CentOS watch out for XFS filesystem settings: https://docs.docker.com/storage/storagedriver/overlayfs-driver/. The simplest solution is to use EXT4.
+
+SET-UP
+     APACHE over HTTPS:
+            -> JIRA (with https app link to Confluence)
+            -> CONFLUENCE (with https app link to Jira)
+            -> CROWD
+
+     Services placement:
+
+        VM1: JIRA
+        VM2: CONFLUENCE, POSTGRESQL and PG_ADMIN
+        VM§: HTTP and CROWD
 
 PARAMS:
 
@@ -18,28 +31,29 @@ PARAMS:
     PROJECT NAME: pepco
     DIRECTORY CROWD: PEPDIR
 
-USE
+HOW TO USE THIS REPO ?
 
-Before install activities create a new branch and replace PARAMS above with real values.
-On hosts download already personalized instructions from your branch
+    Before install activities create a new branch and replace PARAMS above with real values.
+    On hosts download already personalized instructions from your branch
 
-    yum install git && git clone https://github.com/gabrielstar/atlassian_stack.git && cd atlassian_stack &&  git fetch &&   git checkout -b pepco origin/pepco && git pull
+        yum install git && git clone https://github.com/gabrielstar/atlassian_stack.git && cd atlassian_stack &&  git fetch &&   git checkout -b pepco origin/pepco && git pull
 
+    Then perform instructions from each of the folders.
 
-BASIC SET-UP
+BASIC SET-UP FLOW:
 
-1. Set up PG_ADMIN 172.17.8.182:9999 and POSTGRES-9.6 under 172.17.8.182:64320
-2. Set up Confluence stand-alone under http://172.17.8.182:8090/confluence
-3  Set up JIRA stand-alone under http://172.17.8.181:8080/jira
-4. Set up Crowd stand-alone under http://172.17.8.187:8095/crowd
-5. Set up Apache with HTTP under http://centos-linux-t and Configure services under http://centos-linux-t/confluence, http://centos-linux-t/jira
+    1. Set up PG_ADMIN 172.17.8.182:9999 and POSTGRES-9.6 under 172.17.8.182:64320
+    2. Set up Confluence stand-alone under http://172.17.8.182:8090/confluence
+    3  Set up JIRA stand-alone under http://172.17.8.181:8080/jira
+    4. Set up Crowd stand-alone under http://172.17.8.187:8095/crowd
+    5. Set up Apache with HTTP under http://centos-linux-t and Configure services under http://centos-linux-t/confluence, http://centos-linux-t/jira
 
 ADDITIONAL
 
-6. Confgure SSL on Apache under https://centos-linux-t
-     Set up Confluence with reverse proxy and self-signed certificate under https://centos-linux-t/confluence
-     Set up JIRA with reverse proxy and self-signed certificate under https://centos-linux-t/jira
-7. Set up application links using SSL
+    6. Confgure SSL on Apache under https://centos-linux-t
+         Set up Confluence with reverse proxy and self-signed certificate under https://centos-linux-t/confluence
+         Set up JIRA with reverse proxy and self-signed certificate under https://centos-linux-t/jira
+    7. Set up application links using SSL
 
 
 

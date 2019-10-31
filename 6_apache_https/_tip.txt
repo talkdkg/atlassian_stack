@@ -1,8 +1,6 @@
-Create SSL Config:
+CREATE SSL CONFIG and SELF-SIGNED CERTIFICATES:
 
-	GET CERTIFICATES
-
-	Implementing certificate for apache on Apache: https://wiki.centos.org/HowTos/Https
+CREATE CERTIFICATES:  https://wiki.centos.org/HowTos/Https
 
 	yum install mod_ssl openssl
 	openssl genrsa -out ca.key 2048
@@ -12,7 +10,7 @@ Create SSL Config:
 	cp ca.key /etc/pki/tls/private/ca.key
 	cp ca.csr /etc/pki/tls/private/ca.csr
 
-	EDIT SSL CONF FOR APACHE:
+EDIT SSL CONF FOR APACHE:
 
 	vi +/SSLCertificateFile /etc/httpd/conf.d/ssl.conf
 	SSLCertificateFile /etc/pki/tls/certs/ca.crt
@@ -20,12 +18,10 @@ Create SSL Config:
 
 	systemctl restart httpd
 
-	CREATE VIRTUAL HOST CONFIG FOR APACHE:
+CREATE VIRTUAL HOST SSL CONFIG FOR ATLASSIAN TOOLS:
 
 	 cp /etc/httpd/conf.d/atlassian-vhost.conf /etc/httpd/conf.d/atlassian-vhost-ssl.conf
      vi /etc/httpd/conf.d/atlassian-vhost-ssl.conf
-
-	Ensure we redirect main URL
 
 	<VirtualHost *:443>
         SSLEngine on
@@ -55,7 +51,7 @@ Create SSL Config:
 
 	systemctl restart httpd
 
-	Test - should all open main page with https:
+TEST: should open main page with https:
 
 	 Go to: https://centos-linux-t/jira
 	 Go to: https://centos-linux-t/confluence
@@ -63,38 +59,39 @@ Create SSL Config:
 
 
 
-    CONFIGURE SERVICES TO TALK BACK TO APACHE ON 443 and also ADJUSTING THEIR BASE URLS
+CONFIGURE SERVICES TO TALK BACK TO APACHE ON 443 and also ADJUSTING THEIR BASE URLS
 
 
 	CROWD:
 
-	vi /opt/crowd/atlassian-crowd-3.7.0/apache-tomcat/conf/server.xml
+	    vi /opt/crowd/atlassian-crowd-3.7.0/apache-tomcat/conf/server.xml
 
-	Change:  <Connector port="8009" enableLookups="false" redirectPort="8443" protocol="AJP/1.3" /> to
-			 <Connector scheme="https" proxyName="centos-linux-t" port="8009" enableLookups="false" redirectPort="8443" protocol="AJP/1.3" />
+	    Change:  <Connector port="8009" enableLookups="false" redirectPort="8443" protocol="AJP/1.3" /> to
+		    	 <Connector scheme="https" proxyName="centos-linux-t" port="8009" enableLookups="false" redirectPort="8443" protocol="AJP/1.3" />
 
 
-	/opt/crowd/atlassian-crowd-3.7.0/stop_crowd.sh
-	/opt/crowd/atlassian-crowd-3.7.0/start_crowd.sh
+        /opt/crowd/atlassian-crowd-3.7.0/stop_crowd.sh
+        /opt/crowd/atlassian-crowd-3.7.0/start_crowd.sh
 
-	Test: log in to crowd: ...:...
+	    Test: log in to crowd: ...:...
 
-	Update BaseURL to: https://centos-linux-t/crowd
+	    Update BaseURL to: https://centos-linux-t/crowd
 
 	JIRA
 
 		docker container stop jira && docker container rm jira
-            docker run -e JVM_MAXIMUM_MEMORY=4092m -e  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=centos-linux-t -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira6" -d -p 8080:8080 atlassian/jira-software
-		Log in to JIRA: set BaseURl to DNS: e.g. System->  https://centos-linux-t/jira
+        docker run -e JVM_MAXIMUM_MEMORY=4092m -e  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=centos-linux-t -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira6" -d -p 8080:8080 atlassian/jira-software
+		Set BaseURl to HTTPS: e.g. System->  https://centos-linux-t/jira
 
 	CONFLUENCE
+
 		docker container stop confluence && docker container rm confluence
 		docker run -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=centos-linux-t -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence8" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
-		set BaseURl to DNS: e.g. https://centos-linux-t/confluence
+		Set BaseURl to HTTPS: e.g. https://centos-linux-t/confluence
 
-	Tests in Crowd:
+TEST:
 
-	1) Add user
+	 Add user
 
 		Add user->foo_foo, directory DIRECTORY, wait 60s to sync
 		Assert User Applications should be: jira and confluence

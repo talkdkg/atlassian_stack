@@ -1,15 +1,16 @@
-http://172.17.8.187:8095/crowd
-http://centos-linux-t/crowd
-https://centos-linux-t/crowd
+URLs
 
-#for demo sake:
+    http://172.17.8.187:8095/crowd
+    http://centos-linux-t/crowd
+    https://centos-linux-t/crowd
 
-systemctl disable firewalld
-systemctl stop firewalld
+    For Demo
+        systemctl disable firewalld
+        systemctl stop firewalld
 
-as root:
 
-#DOWNLOAD ADOPT OPEN JDK (Atlassian is using the same):
+DOWNLOAD ADOPT OPEN JDK (Atlassian is using the same):
+
     yum install unzip
     wget https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_linux_hotspot_8u222b10.tar.gz
     mkdir -p /opt/openJDK8
@@ -17,37 +18,37 @@ as root:
     cp OpenJDK8U-jdk_x64_linux_hotspot_8u222b10.tar.gz /opt/openJDK8/
     cd /opt/openJDK8/
     tar -xzvf OpenJDK8U-jdk_x64_linux_hotspot_8u222b10.tar.gz
+
+ADD SERVICE USER:
+
     adduser techuser
     chown -R techuser:techuser /opt/*
 
-#set JAVA for all users
+SET JAVA for all users
 
     vi /etc/profile
     export JAVA_HOME=/opt/openJDK8/jdk8u222-b10/
     export PATH=$JAVA_HOME/bin:$PATH
     source /etc/profile
 
-#restart shell and check JAVA is available to all
+    Rrestart shell and check JAVA is available to all
 
-    java -version
-    openjdk version "1.8.0_222"
-    OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_222-b10)
-    OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.222-b10, mixed mode)
+        java -version
+        openjdk version "1.8.0_222"
+        OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_222-b10)
+        OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.222-b10, mixed mode)
 
- switch to non-root user
+INSTALL CROWD
+    su techuser
+    cd /opt/crowd
+    wget  https://product-downloads.atlassian.com/software/crowd/downloads/atlassian-crowd-3.7.0.zip
+    unzip atlassian-crowd-3.7.0.zip
 
-Download crowd
- switch to non-root user
- su techuser
- cd /opt/crowd
- wget  https://product-downloads.atlassian.com/software/crowd/downloads/atlassian-crowd-3.7.0.zip
- unzip atlassian-crowd-3.7.0.zip
+     ll
+        drwxr-xr-x. 9 techuser techuser      4096 Oct  3 12:28 atlassian-crowd-3.7.0
+        -rw-r--r--. 1 techuser techuser 212687301 Oct 17 09:13 atlassian.crowd-3.7.0.zip
 
- ll
-    drwxr-xr-x. 9 techuser techuser      4096 Oct  3 12:28 atlassian-crowd-3.7.0
-    -rw-r--r--. 1 techuser techuser 212687301 Oct 17 09:13 atlassian.crowd-3.7.0.zip
-
- Set CROWD home dir:
+    Set CROWD home dir:
 
      create /var/crowd-home with owner techuser, check he can write there
      sudo su -
@@ -62,10 +63,8 @@ Download crowd
      touch /var/crowd-home/test
 
 
- #connect to postgres - https://confluence.atlassian.com/crowd/postgresql-4030906.html, https://chartio.com/help/data-sources/creating-a-user-with-pgadmin/
- start crowd - by default in background:
-
- 	 use db: crowd, conjir, Camel0
+ CONNECT TO POSTGRES: https://confluence.atlassian.com/crowd/postgresql-4030906.html, https://chartio.com/help/data-sources/creating-a-user-with-pgadmin/
+ START CROWD:
 
  	[ atlassian-crowd-3.7.0]$ ./start_crowd.sh
  	To run Crowd in the foreground, start the server with ./start_crowd.sh -fg
@@ -77,34 +76,35 @@ Download crowd
  	Using CATALINA_PID:    /opt/atlassian-crowd-3.7.0/apache-tomcat/work/catalina.pid
  	Tomcat started.
 
- 	WIZARD START
+USE WIZARD TO CONFIGURE BASIC SERVICE:
+
  	open http://172.17.8.187:8095/crowd
 
-	In crowd - Enter License:server id BCX0-33NK-8E28-F00R
+	Enter License:server id BCX0-33NK-8E28-F00R
 
-	AAABPg0ODAoPeNqNkT9PwzAQxXd/CkssMDiy04LSSpaAJEgVSYqaghhYXHMtFokT2U5L++lJmlT8E
-    QPDLffufveefZZWGs+lw36AGZ0yNr2kOIyW2KdsgiKw0qjaqUrz0FS7V3yeg9mCuXiZ4ngrikZ0G
-    pKd5gnp1Ba4Mw2g0MBRioQD3rEIo8SfoLDSrp3LRAl8I1ZGQeFZJ4w8wM6+q2sp6g2USitPVuXAz
-    VvdgeFrUVgYeomSoC0s9zUcWeE8TeNFOLtJTifiVKjiHze+YvTOi578BMZ2PR+1HO1ACy0h/qiV2
-    X/LxIgfoLnZCK1szwhPcJzX3sGrvAr1TzaL+G34TMlolN2TIPYDckfpAuVxxtsiCRuPr3zG6BAwa
-    8oVmPn60bZGOGFoSNxikln0c2OQ/nb30Bj5Jiz8/olPAJ6nUDAtAhUAhvmpDGdMRGkUd5TbyD5+F
-    xJ2yYwCFGx0uarIgEW8+SYpy6g1+VDJR2yKX02fr
+        AAABPg0ODAoPeNqNkT9PwzAQxXd/CkssMDiy04LSSpaAJEgVSYqaghhYXHMtFokT2U5L++lJmlT8E
+        QPDLffufveefZZWGs+lw36AGZ0yNr2kOIyW2KdsgiKw0qjaqUrz0FS7V3yeg9mCuXiZ4ngrikZ0G
+        pKd5gnp1Ba4Mw2g0MBRioQD3rEIo8SfoLDSrp3LRAl8I1ZGQeFZJ4w8wM6+q2sp6g2USitPVuXAz
+        VvdgeFrUVgYeomSoC0s9zUcWeE8TeNFOLtJTifiVKjiHze+YvTOi578BMZ2PR+1HO1ACy0h/qiV2
+        X/LxIgfoLnZCK1szwhPcJzX3sGrvAr1TzaL+G34TMlolN2TIPYDckfpAuVxxtsiCRuPr3zG6BAwa
+        8oVmPn60bZGOGFoSNxikln0c2OQ/nb30Bj5Jiz8/olPAJ6nUDAtAhUAhvmpDGdMRGkUd5TbyD5+F
+        xJ2yYwCFGx0uarIgEW8+SYpy6g1+VDJR2yKX02fr
 
 
-	New Installation
-	JDBC Connection:
-	  PostgreSQL: jdbc:postgresql://172.17.8.182:64320/crowd
+	Choose New Installation
+	    JDBC Connection:
+	        PostgreSQL: jdbc:postgresql://172.17.8.182:64320/crowd
 
-	Choose Name: PEPDIR, leave defaults
-	admin: conjir:Camel0
-
-	END OF WIZARD
+	Choose Directory Name: PEPDIR, leave defaults
+	    admin: conjir:Camel0
 
 
 
-	CONFIGURE CROWD
 
-	1) Add applications: JIRA
+
+CONFIGURE CROWD TO MANAGE JIRA and CONFLUENCE USERS
+
+	Add applications: JIRA
 
 		in Crowd add application to manage: name: jira, password: Camel0, URL: http://172.17.8.181:8080/jira, IP: 172.17.8.181, then select PEPDIR, Allow all users to authenticate against JIRA
 		in Crowd create necessary groups for JIRA: Groups-Add group:	https://confluence.atlassian.com/crowd/integrating-crowd-with-atlassian-jira-192625.html
@@ -115,24 +115,26 @@ Download crowd
 			After that synchronise -> Directory, edit sync time=1
 		in Crowd add default group membership: Directory-> Options-> jira-users
 
-	2) Add applications: CONFLUENCE
+	Add applications: CONFLUENCE
 			in Crowd add application to manage: name: confluence, password: Camel0, URL: http://172.17.8.182:8090/confluence, IP: 172.17.8.182, then select PEPDIR, Allow all users to authenticate against JIRA
 			in Crowd create necessary groups for Confluence Groups-Add group :https://confluence.atlassian.com/crowd/integrating-crowd-with-atlassian-confluence-198573.html,
 				groups: confluence-users,confluence-administrators
 			in Crowd add default group membership: Directory-> Options-> confluence-users
 			in Confluence: user Directories -> Add Directory -> http://172.17.8.187:8095/crowd, confluence:Camel0, Synchronise,edit sync time=1
-    3) Add 1 user to be member of jira-users, jira-developers, jira-administrators
+    Add 1 user to be member of jira-users, jira-developers, jira-administrators
 
-	At this point any user created in Directory should have access to both jira and confluence apps and after login should also be added to jira-users and confluence-users groups.
-	Jira-users is the group membership that allows login to JIRA.
+	Note: At this point any user created in Directory should have access to both jira and confluence apps and after login should also be added to jira-users and confluence-users groups.
+	jira-users is the group membership that allows login to JIRA.
 
-	Tests in Crowd:
+TEST
 
-	1) Add user
+	Add user
 
 		Add user->foo_foo, directory DIRECTORY
 		Assert User Applications should be: jira and confluence
 		Login to JIRA
 		Login to Confluence.
 
-	2) Add group
+	Add group
+
+	    Check if group is properly synchronized
