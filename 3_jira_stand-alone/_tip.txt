@@ -1,7 +1,7 @@
 URLS
-    http://${JIRA_IP}:8080/jira
-    http://${HTTP_URL}/jira
-    https://${HTTP_URL}/jira
+    http://10.44.85.93:8080/jira
+    http://de-muc-zensus-docker-07/jira
+    https://de-muc-zensus-docker-07/jira
 
     firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do not lower the guard in production though:
 
@@ -16,12 +16,12 @@ CREATE DOCKER VOLUMES
 
 RUN CONTAINER WITH PARAMETERS: https://hub.docker.com/r/atlassian/jira-server/
 
-    docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
+    docker run -e JVM_MAXIMUM_MEMORY=2048m -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
     ip addr show
 
 SET BASE URL
 
-    In JiraApp set BaseURl to actual IP: e.g. http://${JIRA_IP}:8080/jira
+    In JiraApp set BaseURl to actual IP: e.g. http://10.44.85.93:8080/jira
 
 GET LICENSE for server ID from https://my.atlassian.com/license/evaluation
 

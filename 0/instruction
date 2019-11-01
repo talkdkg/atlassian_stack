@@ -22,43 +22,43 @@ WE WILL SET-UP
 
 PARAMS:
 
-    JIRA IP: ${JIRA_IP}
-    CONFLUENCE IP: ${CONFLUENCE_IP}
-    POSTGRES IP: ${POSTGRES_IP}
-    PG_ADMIN IP: ${PG_ADMIN_IP}
-    CROWD IP: ${CROWD_IP}
-    HTTP IP: ${HTTP_IP}
-    HTTP URL: ${HTTP_URL}
+    JIRA IP: 10.44.85.93
+    CONFLUENCE IP: 10.44.85.92
+    POSTGRES IP: 10.44.85.92
+    PG_ADMIN IP: 10.44.85.92
+    CROWD IP: 10.44.85.26
+    HTTP IP: 10.44.85.26
+    HTTP URL: de-muc-zensus-docker-07
 
-    ADMIN_USER: ${ADMIN_USER}
-    ADMIN_PASS: ${ADMIN_PASS}
-    MEMORY: ${MEMORY} //e.g. 1024m
-    PROJECT NAME: ${PROJECT_NAME}
-    DIRECTORY CROWD: ${CROWD_DIR}
+    ADMIN_USER: demo
+    ADMIN_PASS: demo
+    MEMORY: 2048m //e.g. 2048m
+    PROJECT NAME: demo
+    DIRECTORY CROWD: dir
 
 HOW TO USE THIS REPO ?
 
     Before install activities create a new branch and replace PARAMS above with real values.
     On hosts download already personalized instructions from your branch
 
-        yum install git && git clone https://github.com/gabrielstar/atlassian_stack.git && cd atlassian_stack &&  git fetch &&   git checkout -b ${PROJECT_NAME} origin/${PROJECT_NAME} && git pull
+        yum install git && git clone https://github.com/gabrielstar/atlassian_stack.git && cd atlassian_stack &&  git fetch &&   git checkout -b demo origin/demo && git pull
 
     Then perform instructions from each of the folders.
     The detailed instruction is available at https://github.com/gabrielstar/atlassian_stack/wiki.
 
 SET-UP STEPS:
 
-    1. Set up PG_ADMIN ${PG_ADMIN_IP}:9999 and POSTGRES-9.6 under  ${POSTGRES_IP}:64320
-    2. Set up Confluence stand-alone under http://${CONFLUENCE_IP}:8090/confluence
-    3  Set up JIRA stand-alone under http://${JIRA_IP}:8080/jira
-    4. Set up Crowd stand-alone under http://${CROWD_IP}:8095/crowd
-    5. Set up Apache with HTTP under http://${HTTP_URL} and Configure services under http://${HTTP_URL}/confluence, http://${HTTP_URL}/jira
+    1. Set up PG_ADMIN 10.44.85.92:9999 and POSTGRES-9.6 under  10.44.85.92:64320
+    2. Set up Confluence stand-alone under http://10.44.85.92:8090/confluence
+    3  Set up JIRA stand-alone under http://10.44.85.93:8080/jira
+    4. Set up Crowd stand-alone under http://10.44.85.26:8095/crowd
+    5. Set up Apache with HTTP under http://de-muc-zensus-docker-07 and Configure services under http://de-muc-zensus-docker-07/confluence, http://de-muc-zensus-docker-07/jira
 
 ADDITIONAL STEPS
 
-    6. Confgure SSL on Apache under https://${HTTP_URL}
-         Set up Confluence with reverse proxy and self-signed certificate under https://${HTTP_URL}/confluence
-         Set up JIRA with reverse proxy and self-signed certificate under https://${HTTP_URL}/jira
+    6. Confgure SSL on Apache under https://de-muc-zensus-docker-07
+         Set up Confluence with reverse proxy and self-signed certificate under https://de-muc-zensus-docker-07/confluence
+         Set up JIRA with reverse proxy and self-signed certificate under https://de-muc-zensus-docker-07/jira
     7. Set up application links using SSL
 
 

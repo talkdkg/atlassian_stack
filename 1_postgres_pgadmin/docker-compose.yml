@@ -5,7 +5,7 @@ services:
     container_name: pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: '${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}'
-      PGADMIN_DEFAULT_PASSWORD: '${PGADMIN_DEFAULT_PASSWORD:-${ADMIN_PASS}}'
+      PGADMIN_DEFAULT_PASSWORD: '${PGADMIN_DEFAULT_PASSWORD:-demo}'
     ports:
     - '9999:80'
     volumes:
@@ -16,7 +16,7 @@ services:
     container_name: postgres9.6
     environment:
       POSTGRES_USER: '${POSTGRES_USER:-postgres}'
-      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-${ADMIN_PASS}}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-demo}'
     ports:
     - '64320:5432'
     volumes:

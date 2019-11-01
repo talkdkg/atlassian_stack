@@ -1,8 +1,8 @@
 URLs:
 
-    http://${CONFLUENCE_IP}:8090/confluence
-    http://${HTTP_URL}/confluence
-    https://${HTTP_URL}/confluence
+    http://10.44.85.92:8090/confluence
+    http://de-muc-zensus-docker-07/confluence
+    https://de-muc-zensus-docker-07/confluence
 
 NOTE:
     firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do nto lower the guard in production though:
@@ -19,11 +19,11 @@ CREATE DOCKER VOLUMES:
 
 RUN CONTAINER WITH PARAMETERS: https://hub.docker.com/r/atlassian/confluence-server/
 
-    docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
+    docker run -e JVM_MAXIMUM_MEMORY=2048m -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
 
 SET BASE URL
 
-    In Confluence APP: set BaseURl to actual IP: e.g. http://${CONFLUENCE_IP}:8090/confluence
+    In Confluence APP: set BaseURl to actual IP: e.g. http://10.44.85.92:8090/confluence
     Confirm ip
         ip addr show
 
@@ -34,4 +34,4 @@ TEST
 
     Display Tomacat Config file
         docker exec -it confluence cat /opt/atlassian/confluence/conf/server.xml
-    Create sample space via http://${CONFLUENCE_IP}:8090/confluence
+    Create sample space via http://10.44.85.92:8090/confluence

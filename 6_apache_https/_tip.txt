@@ -28,7 +28,7 @@ CREATE VIRTUAL HOST SSL CONFIG FOR ATLASSIAN TOOLS:
         SSLCertificateFile /etc/pki/tls/certs/ca.crt
         SSLCertificateKeyFile /etc/pki/tls/private/ca.key
 
-        ServerName ${HTTP_URL}
+        ServerName de-muc-zensus-docker-07
 
         Redirect "/" "/jira"
 
@@ -39,23 +39,23 @@ CREATE VIRTUAL HOST SSL CONFIG FOR ATLASSIAN TOOLS:
                  Require all granted
         </Proxy>
 
-        ProxyPass /confluence http://${CONFLUENCE_IP}:8090/confluence
-        ProxyPassReverse /confluence http://${CONFLUENCE_IP}:8090/confluence
+        ProxyPass /confluence http://10.44.85.92:8090/confluence
+        ProxyPassReverse /confluence http://10.44.85.92:8090/confluence
 
-        ProxyPass /jira http://${JIRA_IP}:8080/jira
-        ProxyPassReverse /jira http://${JIRA_IP}:8080/jira
+        ProxyPass /jira http://10.44.85.93:8080/jira
+        ProxyPassReverse /jira http://10.44.85.93:8080/jira
 
-        ProxyPass /crowd http://${CROWD_IP}:8095/crowd
-        ProxyPassReverse /crowd http://${CROWD_IP}:8095/crowd
+        ProxyPass /crowd http://10.44.85.26:8095/crowd
+        ProxyPassReverse /crowd http://10.44.85.26:8095/crowd
 	</VirtualHost>
 
 	systemctl restart httpd
 
 TEST: should open main page with https:
 
-	 Go to: https://${HTTP_URL}/jira
-	 Go to: https://${HTTP_URL}/confluence
-	 Go to: https://${HTTP_URL}/crowd
+	 Go to: https://de-muc-zensus-docker-07/jira
+	 Go to: https://de-muc-zensus-docker-07/confluence
+	 Go to: https://de-muc-zensus-docker-07/crowd
 
 
 
@@ -67,7 +67,7 @@ CONFIGURE SERVICES TO TALK BACK TO APACHE ON 443 and also ADJUSTING THEIR BASE U
 	    vi /opt/crowd/atlassian-crowd-3.7.0/apache-tomcat/conf/server.xml
 
 	    Change:  <Connector port="8009" enableLookups="false" redirectPort="8443" protocol="AJP/1.3" /> to
-		    	 <Connector scheme="https" proxyName="${HTTP_URL}" port="8009" enableLookups="false" redirectPort="8443" protocol="AJP/1.3" />
+		    	 <Connector scheme="https" proxyName="de-muc-zensus-docker-07" port="8009" enableLookups="false" redirectPort="8443" protocol="AJP/1.3" />
 
 
         /opt/crowd/atlassian-crowd-3.7.0/stop_crowd.sh
@@ -75,25 +75,25 @@ CONFIGURE SERVICES TO TALK BACK TO APACHE ON 443 and also ADJUSTING THEIR BASE U
 
 	    Test: log in to crowd: ...:...
 
-	    Update BaseURL to: https://${HTTP_URL}/crowd
+	    Update BaseURL to: https://de-muc-zensus-docker-07/crowd
 
 	JIRA
 
 		docker container stop jira && docker container rm jira
-        docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${HTTP_URL} -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira6" -d -p 8080:8080 atlassian/jira-software
-		Set BaseURl to HTTPS: e.g. System->  https://${HTTP_URL}/jira
+        docker run -e JVM_MAXIMUM_MEMORY=2048m -e  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=de-muc-zensus-docker-07 -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira6" -d -p 8080:8080 atlassian/jira-software
+		Set BaseURl to HTTPS: e.g. System->  https://de-muc-zensus-docker-07/jira
 
 	CONFLUENCE
 
 		docker container stop confluence && docker container rm confluence
-		docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${HTTP_URL} -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence8" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
-		Set BaseURl to HTTPS: e.g. https://${HTTP_URL}/confluence
+		docker run -e JVM_MAXIMUM_MEMORY=2048m -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=de-muc-zensus-docker-07 -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence8" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
+		Set BaseURl to HTTPS: e.g. https://de-muc-zensus-docker-07/confluence
 
 TEST:
 
 	 Add user
 
-		Add user->foo_foo, directory ${CROWD_DIR}, wait 60s to sync
+		Add user->foo_foo, directory dir, wait 60s to sync
 		Assert User Applications should be: jira and confluence
 		Login to JIRA
 		Login to Confluence.
