@@ -1,6 +1,6 @@
 URLS:
-    http://172.17.8.182:9999/browser/ - pg_admin
-    172.17.8.182:64320 - postgres
+    http://${PG_ADMIN_IP}:9999/browser/ - pg_admin
+     ${POSTGRES_IP}:64320 - postgres
 
 NOTE:
 
@@ -27,14 +27,14 @@ TEST:
             telnet localhost 9999
 
 
-        Open pg_admin: http://172.17.8.182:9999/browser/ & user pgadmin4@pgadmin.org:Camel0
+        Open pg_admin: http://${PG_ADMIN_IP}:9999/browser/ & user pgadmin4@pgadmin.org:${ADMIN_PASS}
         Create new connection:
-            postgres: Camel0
+            postgres: ${ADMIN_PASS}
 
 
 
 CREATE DBs for JIRA, CONFLUENCE and CROWD
 
 In postgres:
-	1) create new user: Login/Group Roles -> Name:conjir, password: Camel0, privileges: Can login? true, Save
-	2) create db: Create-> Database -> jira/confluence/crowd, owner conjir, collation utf-8, use template0
+	1) create new user: Login/Group Roles -> Name:${ADMIN_USER}, password: ${ADMIN_PASS}, privileges: Can login? true, Save
+	2) create db: Create-> Database -> jira/confluence/crowd, owner ${ADMIN_USER}, collation utf-8, use template0

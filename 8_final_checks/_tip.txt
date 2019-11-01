@@ -9,4 +9,6 @@
 	docker container stop jira
 	docker container start jira
 
-	Remembrr: If you recreate containers you need to re-import certificates!.
+	Remember: If you recreate containers you need to re-import certificates!.
+
+3) You can mount logs for easy access via docker volume so you can use host commands on the log.

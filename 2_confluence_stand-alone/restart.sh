@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 echo "Starting docker"
 systemctl start docker
 echo "Shutting down confluence"

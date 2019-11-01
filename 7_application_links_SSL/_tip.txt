@@ -1,7 +1,7 @@
 CREATE APP LINKS:
 
-	Confluence -> as admin -> Application Links add JIRA: https://centos-linux-t/jira
-	JIRA -> Applications - Application Links add Confluence: https://centos-linux-t/confluence
+	Confluence -> as admin -> Application Links add JIRA: https://${HTTP_URL}/jira
+	JIRA -> Applications - Application Links add Confluence: https://${HTTP_URL}/confluence
 
 	This will fail be default because certificate is self-signed, therefore we need to import it to local trust store :)
 	if the certificate is self-signed, you can import the certificate into the Java trust store, for the JVM that the local application is using. See Check the SSL certificate location below.
@@ -18,7 +18,7 @@ IMPORT CERTIFICATE TO TRUSTED STORES:
 			#start container
 			#mount certificate to container on run
 			docker container stop jira && docker container rm jira
-			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=4092m -e JVM_MAXIMUM_MEMORY=4092m  -e ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=centos-linux-t -e ATL_TOMCAT_CONTEXTPATH=/jira  -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
+			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${HTTP_URL} -e ATL_TOMCAT_CONTEXTPATH=/jira  -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
 			#verify it is there, better use names for containers
 			docker exec -it jira ls /store
 			#or to automate use
@@ -37,7 +37,7 @@ IMPORT CERTIFICATE TO TRUSTED STORES:
             #start container
             #mount certificate to container on run
             docker container stop confluence && docker container rm confluence
-			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=centos-linux-t -e ATL_TOMCAT_CONTEXTPATH=/confluence  -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
+			docker run -v store:/store  -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${HTTP_URL} -e ATL_TOMCAT_CONTEXTPATH=/confluence  -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
 			(...)
 			 docker exec -it confluence /opt/java/openjdk/jre/bin/keytool -import -alias proxy_cert -file /store/ca.crt -keystore /opt/java/openjdk/jre/lib/security/cacerts -noprompt
 			 docker container restart confluence
@@ -46,8 +46,8 @@ IMPORT CERTIFICATE TO TRUSTED STORES:
 
 CREATE ACTUAL LINKS
 
-            Confluence - as admin -> Application Links add JIRA: https://centos-linux-t/jira
-            JIRA - Applications - Application Links add Confluence: https://centos-linux-t/confluence
+            Confluence - as admin -> Application Links add JIRA: https://${HTTP_URL}/jira
+            JIRA - Applications - Application Links add Confluence: https://${HTTP_URL}/confluence
             Check links are bi-directional
             Update base urls
 

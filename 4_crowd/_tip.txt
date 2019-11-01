@@ -1,8 +1,8 @@
 URLs
 
-    http://172.17.8.187:8095/crowd
-    http://centos-linux-t/crowd
-    https://centos-linux-t/crowd
+    http://${CROWD_IP}:8095/crowd
+    http://${HTTP_URL}/crowd
+    https://${HTTP_URL}/crowd
 
     For Demo
         systemctl disable firewalld
@@ -78,25 +78,16 @@ INSTALL CROWD
 
 USE WIZARD TO CONFIGURE BASIC SERVICE:
 
- 	open http://172.17.8.187:8095/crowd
+ 	open http://${CROWD_IP}:8095/crowd
 
-	Enter License:server id BCX0-33NK-8E28-F00R
-
-        AAABPg0ODAoPeNqNkT9PwzAQxXd/CkssMDiy04LSSpaAJEgVSYqaghhYXHMtFokT2U5L++lJmlT8E
-        QPDLffufveefZZWGs+lw36AGZ0yNr2kOIyW2KdsgiKw0qjaqUrz0FS7V3yeg9mCuXiZ4ngrikZ0G
-        pKd5gnp1Ba4Mw2g0MBRioQD3rEIo8SfoLDSrp3LRAl8I1ZGQeFZJ4w8wM6+q2sp6g2USitPVuXAz
-        VvdgeFrUVgYeomSoC0s9zUcWeE8TeNFOLtJTifiVKjiHze+YvTOi578BMZ2PR+1HO1ACy0h/qiV2
-        X/LxIgfoLnZCK1szwhPcJzX3sGrvAr1TzaL+G34TMlolN2TIPYDckfpAuVxxtsiCRuPr3zG6BAwa
-        8oVmPn60bZGOGFoSNxikln0c2OQ/nb30Bj5Jiz8/olPAJ6nUDAtAhUAhvmpDGdMRGkUd5TbyD5+F
-        xJ2yYwCFGx0uarIgEW8+SYpy6g1+VDJR2yKX02fr
-
+	GET LICENSE for server ID from https://my.atlassian.com/license/evaluation
 
 	Choose New Installation
 	    JDBC Connection:
-	        PostgreSQL: jdbc:postgresql://172.17.8.182:64320/crowd
+	        PostgreSQL: jdbc:postgresql://${POSTGRES_IP}:64320/crowd
 
-	Choose Directory Name: PEPDIR, leave defaults
-	    admin: conjir:Camel0
+	Choose Directory Name: ${CROWD_DIR}, leave defaults
+	    admin: ${ADMIN_USER}:${ADMIN_PASS}
 
 
 
@@ -106,21 +97,21 @@ CONFIGURE CROWD TO MANAGE JIRA and CONFLUENCE USERS
 
 	Add applications: JIRA
 
-		in Crowd add application to manage: name: jira, password: Camel0, URL: http://172.17.8.181:8080/jira, IP: 172.17.8.181, then select PEPDIR, Allow all users to authenticate against JIRA
+		in Crowd add application to manage: name: jira, password: ${ADMIN_PASS}, URL: http://${JIRA_IP}:8080/jira, IP: ${JIRA_IP}, then select ${CROWD_DIR}, Allow all users to authenticate against JIRA
 		in Crowd create necessary groups for JIRA: Groups-Add group:	https://confluence.atlassian.com/crowd/integrating-crowd-with-atlassian-jira-192625.html
 			groups jira-administrators, jira-developers, jira-users
 		in JIRA enable application access: Applications-> Add group: jira-users
 		in JIRA: turn on Crowd as User Directory
-			User Management - User Directory-> Add Directory -> Atlassian Crowd, PEPDIR, jira:Camel0,  http://172.17.8.187:8095/crowd
+			User Management - User Directory-> Add Directory -> Atlassian Crowd, ${CROWD_DIR}, jira:${ADMIN_PASS},  http://${CROWD_IP}:8095/crowd
 			After that synchronise -> Directory, edit sync time=1
 		in Crowd add default group membership: Directory-> Options-> jira-users
 
 	Add applications: CONFLUENCE
-			in Crowd add application to manage: name: confluence, password: Camel0, URL: http://172.17.8.182:8090/confluence, IP: 172.17.8.182, then select PEPDIR, Allow all users to authenticate against JIRA
+			in Crowd add application to manage: name: confluence, password: ${ADMIN_PASS}, URL: http://${CONFLUENCE_IP}:8090/confluence, IP: ${CONFLUENCE_IP}, then select ${CROWD_DIR}, Allow all users to authenticate against JIRA
 			in Crowd create necessary groups for Confluence Groups-Add group :https://confluence.atlassian.com/crowd/integrating-crowd-with-atlassian-confluence-198573.html,
 				groups: confluence-users,confluence-administrators
 			in Crowd add default group membership: Directory-> Options-> confluence-users
-			in Confluence: user Directories -> Add Directory -> http://172.17.8.187:8095/crowd, confluence:Camel0, Synchronise,edit sync time=1
+			in Confluence: user Directories -> Add Directory -> http://${CROWD_IP}:8095/crowd, confluence:${ADMIN_PASS}, Synchronise,edit sync time=1
     Add 1 user to be member of jira-users, jira-developers, jira-administrators
 
 	Note: At this point any user created in Directory should have access to both jira and confluence apps and after login should also be added to jira-users and confluence-users groups.
@@ -130,7 +121,7 @@ TEST
 
 	Add user
 
-		Add user->foo_foo, directory DIRECTORY
+		Add user->foo_foo, directory ${CROWD_DIR}
 		Assert User Applications should be: jira and confluence
 		Login to JIRA
 		Login to Confluence.

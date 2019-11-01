@@ -2,12 +2,13 @@ PRE-REQUISITES:
 
     install docker:
         https://docs.docker.com/install/linux/docker-ce/centos/
-    for compose on CentOS 7:
+    install docker-compose, for compose on CentOS 7:
         sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
     If you install CentOS watch out for XFS filesystem settings: https://docs.docker.com/storage/storagedriver/overlayfs-driver/. The simplest solution is to use EXT4.
 
-SET-UP
+WE WILL SET-UP
+
      APACHE over HTTPS:
             -> JIRA (with https app link to Confluence)
             -> CONFLUENCE (with https app link to Jira)
@@ -17,42 +18,47 @@ SET-UP
 
         VM1: JIRA
         VM2: CONFLUENCE, POSTGRESQL and PG_ADMIN
-        VM§: HTTP and CROWD
+        VM3: HTTP and CROWD
 
 PARAMS:
 
-    JIRA VM with 172.17.8.181 - 172.17.8.181
-    CONFLUENCE,PG_ADMIN,POSTGRES VM with 172.17.8.182 - 172.17.8.182
-    CROWD+HTTP VM with 172.17.8.187 and accessible via centos-linux-t - 172.17.8.187
+    JIRA IP: ${JIRA_IP}
+    CONFLUENCE IP: ${CONFLUENCE_IP}
+    POSTGRES IP: ${POSTGRES_IP}
+    PG_ADMIN IP: ${PG_ADMIN_IP}
+    CROWD IP: ${CROWD_IP}
+    HTTP IP: ${HTTP_IP}
+    HTTP URL: ${HTTP_URL}
 
-    ADMIN_USER: conjir
-    ADMIN_PASS: Camel0
-    MEMORY: 4092m
-    PROJECT NAME: pepco
-    DIRECTORY CROWD: PEPDIR
+    ADMIN_USER: ${ADMIN_USER}
+    ADMIN_PASS: ${ADMIN_PASS}
+    MEMORY: ${MEMORY} //e.g. 1024m
+    PROJECT NAME: ${PROJECT_NAME}
+    DIRECTORY CROWD: ${CROWD_DIR}
 
 HOW TO USE THIS REPO ?
 
     Before install activities create a new branch and replace PARAMS above with real values.
     On hosts download already personalized instructions from your branch
 
-        yum install git && git clone https://github.com/gabrielstar/atlassian_stack.git && cd atlassian_stack &&  git fetch &&   git checkout -b pepco origin/pepco && git pull
+        yum install git && git clone https://github.com/gabrielstar/atlassian_stack.git && cd atlassian_stack &&  git fetch &&   git checkout -b ${PROJECT_NAME} origin/${PROJECT_NAME} && git pull
 
     Then perform instructions from each of the folders.
+    The detailed instruction is available at https://github.com/gabrielstar/atlassian_stack/wiki.
 
-BASIC SET-UP FLOW:
+SET-UP STEPS:
 
-    1. Set up PG_ADMIN 172.17.8.182:9999 and POSTGRES-9.6 under 172.17.8.182:64320
-    2. Set up Confluence stand-alone under http://172.17.8.182:8090/confluence
-    3  Set up JIRA stand-alone under http://172.17.8.181:8080/jira
-    4. Set up Crowd stand-alone under http://172.17.8.187:8095/crowd
-    5. Set up Apache with HTTP under http://centos-linux-t and Configure services under http://centos-linux-t/confluence, http://centos-linux-t/jira
+    1. Set up PG_ADMIN ${PG_ADMIN_IP}:9999 and POSTGRES-9.6 under  ${POSTGRES_IP}:64320
+    2. Set up Confluence stand-alone under http://${CONFLUENCE_IP}:8090/confluence
+    3  Set up JIRA stand-alone under http://${JIRA_IP}:8080/jira
+    4. Set up Crowd stand-alone under http://${CROWD_IP}:8095/crowd
+    5. Set up Apache with HTTP under http://${HTTP_URL} and Configure services under http://${HTTP_URL}/confluence, http://${HTTP_URL}/jira
 
-ADDITIONAL
+ADDITIONAL STEPS
 
-    6. Confgure SSL on Apache under https://centos-linux-t
-         Set up Confluence with reverse proxy and self-signed certificate under https://centos-linux-t/confluence
-         Set up JIRA with reverse proxy and self-signed certificate under https://centos-linux-t/jira
+    6. Confgure SSL on Apache under https://${HTTP_URL}
+         Set up Confluence with reverse proxy and self-signed certificate under https://${HTTP_URL}/confluence
+         Set up JIRA with reverse proxy and self-signed certificate under https://${HTTP_URL}/jira
     7. Set up application links using SSL
 
 

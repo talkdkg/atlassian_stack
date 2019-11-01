@@ -1,9 +1,9 @@
 URLS
-    http://172.17.8.181:8080/jira
-    http://centos-linux-t/jira
-    https://centos-linux-t/jira
+    http://${JIRA_IP}:8080/jira
+    http://${HTTP_URL}/jira
+    https://${HTTP_URL}/jira
 
-    firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do nto lower the guard in production though:
+    firewalld might be problematic so we can disable it for PoC but iptables must be there to enable docker networking, do not lower the guard in production though:
 
     systemctl disable firewalld
     systemctl stop firewalld
@@ -16,23 +16,14 @@ CREATE DOCKER VOLUMES
 
 RUN CONTAINER WITH PARAMETERS: https://hub.docker.com/r/atlassian/jira-server/
 
-    docker run -e JVM_MAXIMUM_MEMORY=4092m -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
+    docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
     ip addr show
 
 SET BASE URL
 
-    In JiraApp set BaseURl to actual IP: e.g. http://172.17.8.181:8080/jira
+    In JiraApp set BaseURl to actual IP: e.g. http://${JIRA_IP}:8080/jira
 
-ENTER LICENSE for Server ID: BJ1K-V6M1-7JBU-1ZD5
-
-    AAABjA0ODAoPeNqNkc1O6zAQhfd5CktsuAtbdQSUVop0L4kXLU2LmsIC3Y0x02JIbWvslJ+nJ01aU
-    aBFLMfjmfOdM0e5NWSiAonPSafbj3v9mJM0m5G4w3vRAgHMg3UOkI20AuNB3OugrUnEeCamV9NBI
-    aJxtbwDnMyvPaBPKI9Sa4JUYSyXkCzkHWoomQ8S1Rs8+yf9V0m3gKU2mim7jB41SvZtx1WF6kF6y
-    GSAZA1DeYfG59EGY/bqoNmfTvJcTNPBv9G2JV6cxtedOU7j7pZJ5FKXv4AqAFeAgyy5GPJLenOWc
-    9odXlxTfpudtsQO7X2lAlsX1Nt5eJYIrJbQK0gCVtB+OxzbnnD3uaqBTQAjjTrg7Aeab6ludGpfo
-    0FWiDEd8ZOTs063x6O6Sj6//LC4qIMLgMlclh6iCS6k0V42DtNtjqRw7I1ZZqMUoel9vWXZ0tzUc
-    OvJ+FMkULtGh9pv0szAK9Su0RjWMKTYwJDj9lh//veJWMmyarRa+kPn2Bf0rvju3MfOtn4HfHIaD
-    DAsAhQFUO88s8RQwgFd/DuawY/9LL4vNAIUVnJ/xMlQA0f6qR89RNamzMzzHs4=X02j7
+GET LICENSE for server ID from https://my.atlassian.com/license/evaluation
 
 
 TEST
