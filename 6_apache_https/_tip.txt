@@ -80,13 +80,13 @@ CONFIGURE SERVICES TO TALK BACK TO APACHE ON 443 and also ADJUSTING THEIR BASE U
 	JIRA
 
 		docker container stop jira && docker container rm jira
-        docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${HTTP_URL} -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira6" -d -p 8080:8080 atlassian/jira-software
+        docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e  ATL_TOMCAT_SCHEME=https  -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${HTTP_URL} -e ATL_TOMCAT_CONTEXTPATH=/jira -v jiraConfigVolume:/opt/atlassian/jira/conf -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
 		Set BaseURl to HTTPS: e.g. System->  https://${HTTP_URL}/jira
 
 	CONFLUENCE
 
 		docker container stop confluence && docker container rm confluence
-		docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${HTTP_URL} -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence8" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
+		docker run -e JVM_MAXIMUM_MEMORY=${MEMORY} -e ATL_TOMCAT_SCHEME=https -e ATL_PROXY_PORT=443 -e ATL_PROXY_NAME=${HTTP_URL} -e ATL_TOMCAT_CONTEXTPATH=/confluence -v confluenceConfigVolume:/opt/atlassian/confluence/conf -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence-server
 		Set BaseURl to HTTPS: e.g. https://${HTTP_URL}/confluence
 
 TEST:
